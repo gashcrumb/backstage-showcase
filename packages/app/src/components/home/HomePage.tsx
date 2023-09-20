@@ -13,6 +13,7 @@ import React from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { ErrorReport } from '../../common';
 import { useQuickAccess } from '../../hooks/useQuickAccess';
+import { UnifiedThemeOptions } from '@backstage/theme';
 
 const useStyles = makeStyles()(theme => ({
   img: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles()(theme => ({
   searchBar: {
     display: 'flex',
     maxWidth: '60vw',
-    boxShadow: theme.shadows.at(1),
+    boxShadow: 'none',
     borderRadius: '50px',
     margin: 'auto',
   },
@@ -32,7 +33,10 @@ const useStyles = makeStyles()(theme => ({
     },
   },
   notchedOutline: {
-    borderStyle: 'none!important',
+    borderRadius: '50px !important',
+    borderStyle: `1px solid ${
+      (theme.palette as UnifiedThemeOptions['palette']).border
+    } !important`,
   },
 }));
 

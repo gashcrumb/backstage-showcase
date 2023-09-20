@@ -1,13 +1,30 @@
-import { PageTheme, genPageTheme, shapes } from '@backstage/theme';
+import {
+  PageTheme,
+  UnifiedThemeOptions,
+  genPageTheme,
+  shapes,
+} from '@backstage/theme';
+import { PaletteOptions } from '@mui/material/styles';
 
-export const pageTheme: Record<string, PageTheme> = {
-  home: genPageTheme({ colors: ['#005f60', '#73c5c5'], shape: shapes.wave }),
-  app: genPageTheme({ colors: ['#005f60', '#73c5c5'], shape: shapes.wave }),
-  apis: genPageTheme({ colors: ['#005f60', '#73c5c5'], shape: shapes.wave }),
-  documentation: genPageTheme({
-    colors: ['#005f60', '#73c5c5'],
-    shape: shapes.wave,
-  }),
-  tool: genPageTheme({ colors: ['#005f60', '#73c5c5'], shape: shapes.round }),
-  other: genPageTheme({ colors: ['#005f60', '#73c5c5'], shape: shapes.wave }),
-};
+/**
+ * Create the theme entries for the app pages based on the current palette
+ * @param palette
+ * @returns
+ */
+export function createPagesTheme(
+  palette: UnifiedThemeOptions['palette'] & PaletteOptions,
+): Record<string, PageTheme> {
+  const light = palette.background!.default!;
+  const dark = palette.background!.default!;
+  return {
+    home: genPageTheme({ colors: [dark, light], shape: shapes.wave }),
+    app: genPageTheme({ colors: [dark, light], shape: shapes.wave }),
+    apis: genPageTheme({ colors: [dark, light], shape: shapes.wave }),
+    documentation: genPageTheme({
+      colors: [dark, light],
+      shape: shapes.wave,
+    }),
+    tool: genPageTheme({ colors: [dark, light], shape: shapes.round }),
+    other: genPageTheme({ colors: [dark, light], shape: shapes.wave }),
+  };
+}

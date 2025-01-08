@@ -3,7 +3,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { createApp } from '@backstage/app-defaults';
 import { BackstageApp } from '@backstage/core-app-api';
-import { AnyApiFactory, BackstagePlugin } from '@backstage/core-plugin-api';
+import {
+  AnyApiFactory,
+  AppComponents,
+  BackstagePlugin,
+} from '@backstage/core-plugin-api';
 
 import { useThemes } from '@redhat-developer/red-hat-developer-hub-theme';
 import { AppsConfig } from '@scalprum/core';
@@ -397,6 +401,18 @@ export const DynamicRoot = ({
       const filteredStaticApis = staticApis.filter(
         api => !remoteApis.some(remoteApi => remoteApi.api.id === api.api.id),
       );
+      const signInPageCandidates = allModules.filter(pluginModule =>
+        Object.keys(pluginModule).some(key => key === 'SignInPage'),
+      );
+      const signInPage =
+        signInPageCandidates.length > 0
+          ? signInPageCandidates
+              .map(pluginModule => pluginModule.SignInPage)
+              .reduce(
+                (prev, curr) => (curr ? curr : prev),
+                () => defaultAppComponents.SignInPage,
+              )
+          : defaultAppComponents.SignInPage;
       app.current = createApp({
         apis: [...filteredStaticApis, ...remoteApis],
         bindRoutes({ bind }) {
@@ -408,7 +424,10 @@ export const DynamicRoot = ({
           ...remoteBackstagePlugins,
         ],
         themes: [...filteredStaticThemes, ...dynamicThemeProviders],
-        components: defaultAppComponents,
+        components: {
+          ...defaultAppComponents,
+          SignInPage: signInPage,
+        } as Partial<AppComponents>,
       });
     }
 
